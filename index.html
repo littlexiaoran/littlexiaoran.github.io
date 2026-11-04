@@ -35,6 +35,7 @@
       min-height: 72px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 28px clamp(24px, 5vw, 72px) 0;
     }
 
@@ -54,6 +55,23 @@
     }
     .links a:hover { color: var(--mint); border-color: rgba(100, 251, 210, 0.55); }
     .links a:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+
+    .lang-toggle {
+      align-self: flex-start;
+      margin-top: 4px;
+      padding: 6px 12px;
+      border: 1px solid rgba(130, 159, 181, 0.18);
+      border-radius: 8px;
+      background: transparent;
+      color: #8ba1b4;
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+    .lang-toggle:hover { color: var(--mint); border-color: rgba(100, 251, 210, 0.55); }
+    .lang-toggle:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
 
     main {
       padding: 28px clamp(24px, 5vw, 72px) 40px;
@@ -95,6 +113,7 @@
 
     .game-card strong { display: block; font-size: 18px; letter-spacing: 0.04em; }
     .game-en { display: block; margin-top: 4px; color: #64768d; font-size: 10px; letter-spacing: 0.22em; }
+    html[lang="en"] .game-en { letter-spacing: 0.12em; }
     .game-card p { margin: 10px 0 0; color: #8ba1b4; font-size: 12px; line-height: 1.7; }
     .card-cover { position: absolute; inset: 0; border-radius: 12px; }
     .game-badges { position: absolute; right: 12px; bottom: 10px; display: flex; gap: 12px; z-index: 2; }
@@ -125,15 +144,16 @@
         <a href="https://github.com/LittleXiaoRan" target="_blank" rel="noopener">GitHub</a>
       </nav>
     </div>
+    <button type="button" class="lang-toggle" id="langBtn" aria-label="切换为英文">中文</button>
   </header>
   <main>
     <p class="eyebrow">GAMES</p>
     <section class="games" aria-label="游戏列表">
       <div class="game-card">
         <span class="game-swatch" aria-hidden="true"></span>
-        <strong>星环突围</strong>
-        <span class="game-en">STAR RING BREAKOUT</span>
-        <p>五波进攻 · 随机强化 · 动态首领</p>
+        <strong data-zh="星环突围" data-en="STAR RING BREAKOUT">星环突围</strong>
+        <span class="game-en" data-zh="STAR RING BREAKOUT" data-en="星环突围">STAR RING BREAKOUT</span>
+        <p data-zh="五波进攻 · 随机强化 · 动态首领" data-en="FIVE WAVES · RANDOM UPGRADES · DYNAMIC BOSS">五波进攻 · 随机强化 · 动态首领</p>
         <a class="card-cover" href="https://littlexiaoran.github.io/star-ring-breakout/" target="_blank" rel="noopener" aria-label="星环突围 网页版"></a>
         <div class="game-badges">
           <a class="game-badge itch" href="https://littlexiaoran.itch.io/star-ring-breakout" target="_blank" rel="noopener">ITCH.IO ›</a>
@@ -142,9 +162,9 @@
       </div>
       <div class="game-card">
         <span class="game-swatch" aria-hidden="true" style="--swatch: #4dd7ff"></span>
-        <strong>67射手</strong>
-        <span class="game-en">67 SHOOTER</span>
-        <p>光标瞄准 · 长按连射 · 弹道追踪</p>
+        <strong data-zh="67射手" data-en="67 SHOOTER">67射手</strong>
+        <span class="game-en" data-zh="67 SHOOTER" data-en="67射手">67 SHOOTER</span>
+        <p data-zh="光标瞄准 · 长按连射 · 弹道追踪" data-en="CURSOR AIM · HOLD TO FIRE · TRACKING SHOTS">光标瞄准 · 长按连射 · 弹道追踪</p>
         <a class="card-cover" href="https://littlexiaoran.github.io/67-shooter/" target="_blank" rel="noopener" aria-label="67射手 网页版"></a>
         <div class="game-badges">
           <a class="game-badge" href="https://littlexiaoran.github.io/67-shooter/" target="_blank" rel="noopener">PLAY ›</a>
@@ -152,5 +172,33 @@
       </div>
     </section>
   </main>
+  <script>
+    const LANGS = {
+      zh: { label: '中文', htmlLang: 'zh-CN' },
+      en: { label: 'EN', htmlLang: 'en' }
+    };
+    let lang = 'zh';
+    try {
+      const saved = localStorage.getItem('portal-lang');
+      if (saved === 'zh' || saved === 'en') lang = saved;
+    } catch (e) {}
+    const langBtn = document.getElementById('langBtn');
+    function applyLang() {
+      document.documentElement.lang = LANGS[lang].htmlLang;
+      document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+        el.textContent = el.dataset[lang];
+      });
+      langBtn.textContent = LANGS[lang].label;
+      langBtn.setAttribute('aria-label', lang === 'zh' ? '切换为英文' : 'Switch to Chinese');
+    }
+    langBtn.addEventListener('click', () => {
+      lang = lang === 'zh' ? 'en' : 'zh';
+      try { localStorage.setItem('portal-lang', lang); } catch (e) {}
+      applyLang();
+    });
+    applyLang();
+  </script>
+  <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+  <script>LA.init({id:"3RisH9y6dKrj6wRn",ck:"3RisH9y6dKrj6wRn"})</script>
 </body>
 </html>
