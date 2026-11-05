@@ -1,13 +1,29 @@
-# LittleXiaoRan 游戏站
+# LittleXiaoRan · 游戏门户
 
-我的原创网页游戏门户，托管在 GitHub Pages：[littlexiaoran.github.io](https://littlexiaoran.github.io/)
+原创网页游戏的个人主页。
+
+**主页地址：** https://littlexiaoran.github.io/
 
 ## 游戏
 
-- [星环突围](https://littlexiaoran.github.io/star-ring-breakout/) — 太空射击生存游戏
+### 星环突围 · STAR RING BREAKOUT
 
-## 结构
+五波进攻 · 随机强化 · 动态首领。在失控星域中，杀出一条回路。
 
-- `index.html` — 门户首页
-- 游戏各自独立仓库（如 `star-ring-breakout`），部署到本站子路径
-- 推送 `main` 分支自动更新站点
+在线游玩：https://littlexiaoran.github.io/star-ring-breakout/
+
+## 主页说明
+
+- `index.html` 为整站唯一文件，纯 HTML + CSS，无任何外部依赖
+- 视觉风格取自《星环突围》：深空径向渐变底色、薄荷绿点缀、卡片式游戏入口
+- 游戏卡片直接链向各游戏的部署地址；新增游戏只需复制一张 `.game-card` 卡片
+
+## 本地预览
+
+直接双击打开 `index.html`，或启动本地静态服务器：
+
+```bash
+python3 -m http.server 8000
+```
+
+然后访问 http://localhost:8000
