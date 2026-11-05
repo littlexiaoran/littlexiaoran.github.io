@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070b13">
+  <title>404 · 迷失深空</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070b13;
+      --text: #edf7ff;
+      --muted: #8a9bb0;
+      --mint: #64fbd2;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; width: 100%; height: 100%; }
+
+    body {
+      background: radial-gradient(circle at 50% -20%, #14233b 0, var(--bg) 48%, #05070d 100%);
+      color: var(--text);
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px clamp(20px, 5vw, 48px);
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      opacity: 0.85;
+    }
+
+    .planet-wrap {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      margin-bottom: 28px;
+      animation: bob 9s ease-in-out infinite;
+    }
+
+    .planet {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 30%, #46597a 0, #1c2940 48%, #0a1220 100%);
+      box-shadow:
+        inset -10px -8px 24px rgba(0, 0, 0, 0.65),
+        0 0 26px rgba(100, 251, 210, 0.10);
+    }
+
+    .planet::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 168%;
+      height: 46%;
+      transform: translate(-50%, -50%) rotate(-18deg);
+      border: 1.5px solid rgba(156, 183, 211, 0.30);
+      border-radius: 50%;
+    }
+
+    .pulse {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(100, 251, 210, 0.4);
+      animation: pulse 6s ease-out infinite;
+    }
+
+    @keyframes pulse {
+      0%   { transform: scale(0.35); opacity: 0.6; }
+      65%  { opacity: 0.05; }
+      100% { transform: scale(2.6); opacity: 0; }
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-7px); }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(96px, 22vw, 176px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--text);
+      text-shadow: 0 0 30px rgba(100, 251, 210, 0.28);
+      animation: signal 5s ease-in-out infinite;
+    }
+
+    @keyframes signal {
+      0%, 88%, 100% { opacity: 1; }
+      90% { opacity: 0.86; }
+      92% { opacity: 1; }
+      96% { opacity: 0.92; }
+      98% { opacity: 1; }
+    }
+
+    .line {
+      margin: 18px 0 0;
+      font-size: clamp(15px, 2.2vw, 18px);
+      letter-spacing: 0.06em;
+    }
+
+    .line.sub {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: clamp(12px, 1.8vw, 14px);
+      letter-spacing: 0.08em;
+    }
+
+    .btn {
+      margin-top: 36px;
+      padding: 12px 30px;
+      border: 1px solid rgba(100, 251, 210, 0.45);
+      border-radius: 999px;
+      color: var(--mint);
+      font-family: inherit;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      transition: background 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .btn:hover {
+      background: rgba(100, 251, 210, 0.08);
+      border-color: rgba(100, 251, 210, 0.85);
+      box-shadow: 0 0 22px rgba(100, 251, 210, 0.25);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--mint);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .planet-wrap, .pulse, h1 { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <main>
+    <p class="eyebrow">LOST IN SPACE · 信号中断</p>
+
+    <div class="planet-wrap" aria-hidden="true">
+      <div class="planet"></div>
+      <div class="pulse"></div>
+    </div>
+
+    <h1>404</h1>
+
+    <p class="line">你寻找的页面，已经漂进深空的尽头。</p>
+    <p class="line sub">它没有留下任何回音，只有星尘还在这里缓慢坠落。</p>
+
+    <a class="btn" href="https://littlexiaoran.github.io/">返回首页</a>
+  </main>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById('stars');
+      const ctx = canvas.getContext('2d');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const LAYERS = [
+        { n: 60, r: [0.4, 0.9], a: [0.15, 0.45], drift: 7,  depth: 0.3 },
+        { n: 45, r: [0.7, 1.3], a: [0.25, 0.60], drift: 13, depth: 0.6 },
+        { n: 22, r: [1.0, 1.8], a: [0.35, 0.80], drift: 20, depth: 1.0 }
+      ];
+
+      let W = 0, H = 0, dpr = 1;
+      let stars = [], meteors = [];
+      let nextMeteor = 5, last = performance.now();
+      let mx = 0.5, my = 0.5; // 鼠标位置（归一化）
+
+      function rand(a, b) { return a + Math.random() * (b - a); }
+
+      function makeStar(layer) {
+        return {
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: rand(layer.r[0], layer.r[1]),
+          base: rand(layer.a[0], layer.a[1]),
+          ph: Math.random() * Math.PI * 2,
+          sp: rand(0.6, 1.8),
+          layer: layer
+        };
+      }
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        stars = [];
+        LAYERS.forEach(function (l) {
+          for (let i = 0; i < l.n; i++) stars.push(makeStar(l));
+        });
+      }
+
+      function spawnMeteor() {
+        const fromLeft = Math.random() < 0.5;
+        const x = fromLeft ? rand(0, W * 0.4) : rand(W * 0.6, W);
+        const y = rand(0, H * 0.25);
+        const vx = fromLeft ? rand(180, 320) : rand(-320, -180);
+        const vy = rand(60, 120);
+        meteors.push({ x: x, y: y, vx: vx, vy: vy, life: 0, max: rand(0.8, 1.2) });
+      }
+
+      function draw(now) {
+        const dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
+        ctx.clearRect(0, 0, W, H);
+
+        const px = (mx - 0.5) * 10;
+        const py = (my - 0.5) * 8;
+
+        for (const s of stars) {
+          s.y += s.layer.drift * dt;
+          if (s.y > H + 2) { s.y = -2; s.x = Math.random() * W; }
+          const a = s.base * (0.55 + 0.45 * Math.sin(now * 0.001 * s.sp + s.ph));
+          ctx.globalAlpha = Math.max(a, 0.03);
+          ctx.fillStyle = '#cfe3f7';
+          ctx.beginPath();
+          ctx.arc(s.x + px * s.layer.depth, s.y + py * s.layer.depth, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        if (!reduced) {
+          nextMeteor -= dt;
+          if (nextMeteor <= 0) {
+            spawnMeteor();
+            nextMeteor = rand(8, 14);
+          }
+        }
+
+        for (let i = meteors.length - 1; i >= 0; i--) {
+          const m = meteors[i];
+          m.x += m.vx * dt;
+          m.y += m.vy * dt;
+          m.life += dt;
+          const k = m.life / m.max;
+          if (k >= 1) { meteors.splice(i, 1); continue; }
+          const fade = Math.sin(Math.PI * k);
+          const tail = 90 * fade;
+          const dx = m.vx, dy = m.vy;
+          const len = Math.hypot(dx, dy);
+          const tx = m.x - (dx / len) * tail;
+          const ty = m.y - (dy / len) * tail;
+          const grad = ctx.createLinearGradient(m.x, m.y, tx, ty);
+          grad.addColorStop(0, 'rgba(237,247,255,' + (0.9 * fade) + ')');
+          grad.addColorStop(1, 'rgba(237,247,255,0)');
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(m.x, m.y);
+          ctx.lineTo(tx, ty);
+          ctx.stroke();
+        }
+
+        ctx.globalAlpha = 1;
+        if (!reduced && !document.hidden) requestAnimationFrame(draw);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', function (e) {
+        mx = e.clientX / W;
+        my = e.clientY / H;
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) {
+          last = performance.now();
+          requestAnimationFrame(draw);
+        }
+      });
+
+      if (reduced) {
+        // 静态星空：仅绘制一次
+        for (const s of stars) {
+          ctx.globalAlpha = s.base;
+          ctx.fillStyle = '#cfe3f7';
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      } else {
+        requestAnimationFrame(draw);
+      }
+    })();
+  </script>
+</body>
+</html>
