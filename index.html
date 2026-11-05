@@ -90,7 +90,7 @@
     .game-card {
       position: relative;
       min-height: 164px;
-      padding: 16px;
+      padding: 16px 16px 36px;
       border: 1px solid rgba(130, 159, 181, 0.18);
       border-radius: 12px;
       background: rgba(17, 28, 43, 0.92);
@@ -117,6 +117,9 @@
     .game-card p { margin: 10px 0 0; color: #8ba1b4; font-size: 12px; line-height: 1.7; }
     .card-cover { position: absolute; inset: 0; border-radius: 12px; }
     .game-badges { position: absolute; right: 12px; bottom: 10px; display: flex; gap: 12px; z-index: 2; }
+    .game-github { position: absolute; left: 12px; bottom: 10px; color: #64768d; font-size: 10px; letter-spacing: 0.1em; z-index: 2; transition: color 160ms ease; }
+    .game-github:hover { color: var(--mint); }
+    .game-github:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
     .game-badge { color: var(--mint); font-size: 10px; letter-spacing: 0.1em; transition: color 160ms ease; }
     .game-badge:hover { color: #fff; }
     .game-badge.itch { color: #f5c96b; }
@@ -141,7 +144,7 @@
       <strong>Little<span>XiaoRan</span></strong>
       <nav class="links" aria-label="外部链接">
         <a href="https://littlexiaoran.itch.io/" target="_blank" rel="noopener">itch.io</a>
-        <a href="https://github.com/LittleXiaoRan" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/littlexiaoran" target="_blank" rel="noopener">GitHub</a>
       </nav>
     </div>
     <button type="button" class="lang-toggle" id="langBtn" aria-label="切换为英文">中文</button>
@@ -155,6 +158,7 @@
         <span class="game-en" data-zh="STAR RING BREAKOUT" data-en="星环突围">STAR RING BREAKOUT</span>
         <p data-zh="五波进攻 · 随机强化 · 动态首领" data-en="FIVE WAVES · RANDOM UPGRADES · DYNAMIC BOSS">五波进攻 · 随机强化 · 动态首领</p>
         <a class="card-cover" href="https://littlexiaoran.github.io/star-ring-breakout/" target="_blank" rel="noopener" aria-label="星环突围 网页版"></a>
+        <a class="game-github" href="https://github.com/littlexiaoran/star-ring-breakout" target="_blank" rel="noopener">GITHUB ›</a>
         <div class="game-badges">
           <a class="game-badge itch" href="https://littlexiaoran.itch.io/star-ring-breakout" target="_blank" rel="noopener">ITCH.IO ›</a>
           <a class="game-badge" href="https://littlexiaoran.github.io/star-ring-breakout/" target="_blank" rel="noopener">PLAY ›</a>
@@ -166,6 +170,7 @@
         <span class="game-en" data-zh="67 SHOOTER" data-en="67射手">67 SHOOTER</span>
         <p data-zh="光标瞄准 · 长按连射 · 弹道追踪" data-en="CURSOR AIM · HOLD TO FIRE · TRACKING SHOTS">光标瞄准 · 长按连射 · 弹道追踪</p>
         <a class="card-cover" href="https://littlexiaoran.github.io/67-shooter/" target="_blank" rel="noopener" aria-label="67射手 网页版"></a>
+        <a class="game-github" href="https://github.com/littlexiaoran/67-shooter" target="_blank" rel="noopener">GITHUB ›</a>
         <div class="game-badges">
           <a class="game-badge" href="https://littlexiaoran.github.io/67-shooter/" target="_blank" rel="noopener">PLAY ›</a>
         </div>
@@ -176,6 +181,7 @@
         <span class="game-en" data-zh="LUCK DRAW" data-en="抽签">LUCK DRAW</span>
         <p data-zh="摇签解运 · 六档签文 · 运势统计" data-en="SHAKE & DRAW · SIX-TIER FORTUNES · DRAW STATS">摇签解运 · 六档签文 · 运势统计</p>
         <a class="card-cover" href="https://littlexiaoran.github.io/luck-draw/" target="_blank" rel="noopener" aria-label="抽签 网页版"></a>
+        <a class="game-github" href="https://github.com/littlexiaoran/luck-draw" target="_blank" rel="noopener">GITHUB ›</a>
         <div class="game-badges">
           <a class="game-badge" href="https://littlexiaoran.github.io/luck-draw/" target="_blank" rel="noopener">PLAY ›</a>
         </div>
@@ -184,8 +190,9 @@
         <span class="game-swatch" aria-hidden="true" style="--swatch: #b58863"></span>
         <strong data-zh="国际象棋" data-en="CHESS">国际象棋</strong>
         <span class="game-en" data-zh="CHESS" data-en="国际象棋">CHESS</span>
-        <p data-zh="人机对战 · 三档难度 · 完整规则" data-en="VS AI · THREE DIFFICULTIES · FULL RULES">人机对战 · 三档难度 · 完整规则</p>
+        <p data-zh="双人对战 · 人机对战 · 完整规则" data-en="TWO PLAYERS · VS AI · FULL RULES">双人对战 · 人机对战 · 完整规则</p>
         <a class="card-cover" href="https://littlexiaoran.github.io/chess/" target="_blank" rel="noopener" aria-label="国际象棋 网页版"></a>
+        <a class="game-github" href="https://github.com/littlexiaoran/chess" target="_blank" rel="noopener">GITHUB ›</a>
         <div class="game-badges">
           <a class="game-badge" href="https://littlexiaoran.github.io/chess/" target="_blank" rel="noopener">PLAY ›</a>
         </div>
@@ -196,6 +203,7 @@
         <span class="game-en" data-zh="3D MAZE" data-en="3D迷宫">3D MAZE</span>
         <p data-zh="第一人称 · 5道关卡 · 钥匙寻门" data-en="FIRST PERSON · 5 LEVELS · KEYS & DOORS">第一人称 · 5道关卡 · 钥匙寻门</p>
         <a class="card-cover" href="https://littlexiaoran.github.io/3d-maze/" target="_blank" rel="noopener" aria-label="3D迷宫 网页版"></a>
+        <a class="game-github" href="https://github.com/littlexiaoran/3d-maze" target="_blank" rel="noopener">GITHUB ›</a>
         <div class="game-badges">
           <a class="game-badge" href="https://littlexiaoran.github.io/3d-maze/" target="_blank" rel="noopener">PLAY ›</a>
         </div>
