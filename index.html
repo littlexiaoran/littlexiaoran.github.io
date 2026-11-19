@@ -285,7 +285,14 @@
       var closeBtn = document.getElementById('eeClose');
       var msgEl = document.getElementById('eeMessage');
       var STORAGE_KEY = 'ee-unlocked';
-      var TARGET = 'woshitangxinyi';
+      var DEFAULT_HTML = '今天的青菜每千克比昨天涨了<b>2</b>元钱。';
+      var HUAISHIYI_HTML = '坏诗宜<br>滚木之人';
+      var TARGETS = [
+        { seq: 'woshitangxinyi', html: DEFAULT_HTML },
+        { seq: 'woshihuaishiyi', html: HUAISHIYI_HTML }
+      ];
+      var MAX_SEQ_LEN = 0;
+      TARGETS.forEach(function (t) { if (t.seq.length > MAX_SEQ_LEN) MAX_SEQ_LEN = t.seq.length; });
       var buf = '';
       var modal = document.getElementById('eeModal');
       var CORNER = 22;
@@ -347,7 +354,24 @@
       }
       function unlock(html) {
         show(html);
-        try { localStorage.setItem(STORAGE_KEY, msgEl.innerHTML); } catch (e) {}
+        var v = msgEl.innerHTML;
+        try { localStorage.setItem(STORAGE_KEY, v); } catch (e) {}
+        try { document.cookie = STORAGE_KEY + '=' + encodeURIComponent(v) + '; path=/; max-age=315360000'; } catch (e) {}
+      }
+      function readStored() {
+        try {
+          var v = localStorage.getItem(STORAGE_KEY);
+          if (v) return v;
+        } catch (e) {}
+        try {
+          var prefix = STORAGE_KEY + '=';
+          var parts = document.cookie.split(';');
+          for (var i = 0; i < parts.length; i++) {
+            var c = parts[i].replace(/^\s+/, '');
+            if (c.indexOf(prefix) === 0) return decodeURIComponent(c.slice(prefix.length));
+          }
+        } catch (e) {}
+        return null;
       }
       function hide() {
         overlay.classList.remove('open');
@@ -362,15 +386,15 @@
         if (e.ctrlKey || e.metaKey || e.altKey) return;
         var k = (e.key || '').toLowerCase();
         if (!/^[a-z]$/.test(k)) return;
-        buf = (buf + k).slice(-TARGET.length);
-        if (buf === TARGET) { buf = ''; show(); }
+        buf = (buf + k).slice(-MAX_SEQ_LEN);
+        for (var i = 0; i < TARGETS.length; i++) {
+          if (buf.slice(-TARGETS[i].seq.length) === TARGETS[i].seq) { buf = ''; show(TARGETS[i].html); break; }
+        }
       });
-
-      var DEFAULT_HTML = '今天的青菜每千克比昨天涨了<b>2</b>元钱。';
 
       var RULES = [
         { ipv4: [['58', '246'], ['114', '88']], ipv6: [['2408', '840d', '2d00'], ['240e', 'b8f', '2c37']], html: DEFAULT_HTML },
-        { ipv4: [['183', '193', '144']], ipv6: [], html: '坏适宜<br>滚木之人' }
+        { ipv4: [['183', '193', '144']], ipv6: [], html: HUAISHIYI_HTML }
       ];
 
       function normIPv6(s) {
@@ -419,8 +443,7 @@
         } catch (e) {}
       }
 
-      var saved;
-      try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+      var saved = readStored();
       if (saved) {
         show(saved);
       } else {
