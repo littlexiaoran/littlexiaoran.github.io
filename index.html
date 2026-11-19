@@ -158,7 +158,8 @@
     }
 
     .ee-modal {
-      width: min(86vw, 460px);
+      width: fit-content;
+      max-width: min(86vw, 460px);
       padding: 30px 26px 26px;
       background: linear-gradient(155deg, #16263f 0%, #0b1220 100%);
       border-radius: 22px;
@@ -273,7 +274,7 @@
   <div class="ee-overlay" id="eeOverlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="ee-card">
       <div class="ee-modal" id="eeModal">
-        <p>今天的青菜每千克比昨天涨了<b>2</b>元钱。</p>
+        <p id="eeMessage">今天的青菜每千克比昨天涨了<b>2</b>元钱。</p>
         <button type="button" class="ee-close" id="eeClose">知道了</button>
       </div>
     </div>
@@ -282,6 +283,8 @@
     (function () {
       var overlay = document.getElementById('eeOverlay');
       var closeBtn = document.getElementById('eeClose');
+      var msgEl = document.getElementById('eeMessage');
+      var STORAGE_KEY = 'ee-unlocked';
       var TARGET = 'woshitangxinyi';
       var buf = '';
       var modal = document.getElementById('eeModal');
@@ -335,10 +338,16 @@
         window.addEventListener('resize', applySquircle);
       }
 
-      function show() {
+      function show(html) {
+        msgEl.innerHTML = html || DEFAULT_HTML;
         overlay.classList.add('open');
         overlay.setAttribute('aria-hidden', 'false');
         closeBtn.focus();
+        applySquircle();
+      }
+      function unlock(html) {
+        show(html);
+        try { localStorage.setItem(STORAGE_KEY, msgEl.innerHTML); } catch (e) {}
       }
       function hide() {
         overlay.classList.remove('open');
@@ -357,8 +366,12 @@
         if (buf === TARGET) { buf = ''; show(); }
       });
 
-      var IPV4_PREFIXES = [['58', '246'], ['185', '220']];
-      var IPV6_PREFIXES = [['2408', '840d', '2d00'], ['2407', 'cdc0', 'f001']];
+      var DEFAULT_HTML = '今天的青菜每千克比昨天涨了<b>2</b>元钱。';
+
+      var RULES = [
+        { ipv4: [['58', '246'], ['114', '88']], ipv6: [['2408', '840d', '2d00'], ['240e', 'b8f', '2c37']], html: DEFAULT_HTML },
+        { ipv4: [['183', '193', '144']], ipv6: [], html: '坏适宜<br>滚木之人' }
+      ];
 
       function normIPv6(s) {
         if (!s) return '';
@@ -385,16 +398,14 @@
       function triggerByIp(ip) {
         if (!ip) return;
         ip = String(ip).toLowerCase().trim();
-        var groups, i;
-        if (ip.indexOf('.') !== -1) {
-          groups = ip.split('.');
-          for (i = 0; i < IPV4_PREFIXES.length; i++) {
-            if (matchesPrefix(groups, IPV4_PREFIXES[i])) { show(); return; }
-          }
-        } else if (ip.indexOf(':') !== -1) {
-          groups = normIPv6(ip).split(':');
-          for (i = 0; i < IPV6_PREFIXES.length; i++) {
-            if (matchesPrefix(groups, IPV6_PREFIXES[i])) { show(); return; }
+        var isV4 = ip.indexOf('.') !== -1;
+        var isV6 = ip.indexOf(':') !== -1;
+        if (!isV4 && !isV6) return;
+        var groups = isV4 ? ip.split('.') : normIPv6(ip).split(':');
+        for (var r = 0; r < RULES.length; r++) {
+          var list = isV4 ? RULES[r].ipv4 : RULES[r].ipv6;
+          for (var i = 0; i < list.length; i++) {
+            if (matchesPrefix(groups, list[i])) { unlock(RULES[r].html); return; }
           }
         }
       }
@@ -408,8 +419,14 @@
         } catch (e) {}
       }
 
-      fetchIp('https://api.ipify.org?format=json');
-      fetchIp('https://api64.ipify.org?format=json');
+      var saved;
+      try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+      if (saved) {
+        show(saved);
+      } else {
+        fetchIp('https://api.ipify.org?format=json');
+        fetchIp('https://api64.ipify.org?format=json');
+      }
     })();
   </script>
   <script>
